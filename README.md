@@ -10,6 +10,12 @@ The scan roots are configured in BB settings as a comma-separated list of absolu
 
 Cleanup actions are guarded: removing a worktree requires a clean worktree and an explicit confirmation in the UI; stale worktree metadata is pruned with `git worktree prune`.
 
+## Screenshots
+
+![repo-watch](docs/screenshot.png)
+
+*Repo Watch: local repositories and worktrees needing attention.*
+
 ## Install
 
 ```sh
