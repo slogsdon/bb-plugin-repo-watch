@@ -1,10 +1,14 @@
 {
   "name": "bb-plugin-repo-watch",
   "version": "0.1.0",
+  "description": "Monitor local repositories, worktrees, and branches that need attention.",
   "type": "module",
   "license": "MIT",
   "author": "Shane Logsdon",
-  "repository": "https://github.com/slogsdon/bb-plugin-repo-watch",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slogsdon/bb-plugin-repo-watch.git"
+  },
   "engines": {
     "bb": ">=0.37",
     "bbPluginSdk": ">=0.4.6"
@@ -41,5 +45,8 @@
     "hono": "^4.11.9",
     "typescript": "^5.7.0",
     "@radix-ui/react-dialog": "^1.1.19"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
