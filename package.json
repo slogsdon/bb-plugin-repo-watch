@@ -1,6 +1,6 @@
 {
   "name": "bb-plugin-repo-watch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Monitor local repositories, worktrees, and branches that need attention.",
   "type": "module",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "app": "./app.tsx"
   },
   "scripts": {
+    "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "build": "bb plugin build ."
   },
@@ -37,14 +38,18 @@
   },
   "devDependencies": {
     "@get-bb/plugin-sdk": "0.4.6",
+    "@radix-ui/react-dialog": "^1.1.19",
+    "@testing-library/react": "^16.3.2",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "better-sqlite3": "^12.0.0",
+    "cron-parser": "^5.10.0",
     "hono": "^4.11.9",
+    "jsdom": "^29.1.1",
     "typescript": "^5.7.0",
-    "@radix-ui/react-dialog": "^1.1.19"
+    "vitest": "^4.1.10"
   },
   "files": [
     "dist"
