@@ -1,6 +1,6 @@
 {
   "name": "bb-plugin-repo-watch",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Monitor local repositories, worktrees, and branches that need attention.",
   "type": "module",
   "license": "MIT",
@@ -52,6 +52,8 @@
     "vitest": "^4.1.10"
   },
   "files": [
-    "dist"
+    "dist",
+    "server.ts",
+    "app.tsx"
   ]
 }
