@@ -9,6 +9,12 @@ const MAX_REPOS = 100;
 const MAX_SCAN_DEPTH = 3;
 const commandOptions = { timeout: 8_000, maxBuffer: 256 * 1024 };
 
+export function openCommandForPlatform(platform: NodeJS.Platform, path: string) {
+  if (platform === "darwin") return { command: "open", args: [path] };
+  if (platform === "win32") return { command: "explorer.exe", args: [path] };
+  return { command: "xdg-open", args: [path] };
+}
+
 const worktreeSchema = z.object({
   path: z.string(), branch: z.string().nullable(), isMain: z.boolean(), isMissing: z.boolean(),
   isClean: z.boolean().nullable(), isMerged: z.boolean(), needsCleanup: z.boolean(),
@@ -26,6 +32,8 @@ export const snapshotSchema = z.object({
 export const rpcContract = defineRpcContract({
   snapshot: { input: z.null(), output: snapshotSchema },
   refresh: { input: z.null(), output: snapshotSchema },
+  openPath: { input: z.object({ path: z.string().min(1) }), output: z.object({ ok: z.boolean(), message: z.string() }) },
+  gitStatus: { input: z.object({ path: z.string().min(1) }), output: z.object({ ok: z.boolean(), output: z.string() }) },
   prune: { input: z.object({ repoPath: z.string() }), output: z.object({ ok: z.boolean(), message: z.string() }) },
   removeWorktree: { input: z.object({ repoPath: z.string(), worktreePath: z.string() }), output: z.object({ ok: z.boolean(), message: z.string() }) },
 });
@@ -106,6 +114,17 @@ export default async function plugin(bb: BbPluginApi) {
   bb.rpc.register(rpcContract, {
     snapshot,
     refresh: snapshot,
+    openPath: async ({ path }) => {
+      try {
+        const { command, args } = openCommandForPlatform(process.platform, path);
+        await execFileAsync(command, args, commandOptions);
+        return { ok: true, message: `Opened ${path}` };
+      } catch (error) { return { ok: false, message: (error as Error).message }; }
+    },
+    gitStatus: async ({ path }) => {
+      try { return { ok: true, output: await git(path, ["status", "--short", "--branch"]) }; }
+      catch (error) { return { ok: false, output: (error as Error).message }; }
+    },
     prune: async ({ repoPath }) => {
       try { await git(repoPath, ["worktree", "prune"]); return { ok: true, message: "Pruned stale worktree records" }; }
       catch (error) { return { ok: false, message: (error as Error).message }; }
